@@ -8,17 +8,13 @@ import cv2
 from PIL import Image as im 
 import numpy as np
 import matplotlib.pyplot as plt
-path = './data/test/' 
-pathAu = './data/augmentation' 
+path = './data/need' 
+pathAu = './data/augmentation/' 
 IMAGE_SIZE = 48
-batch_size = 128
-def plotImages(images_arr):
-    fig, axes = plt.subplots(1, 5, figsize=(20,20))
-    axes = axes.flatten()
-    index=0
-    for img, ax in zip( images_arr, axes):
+batch_size = 3829
+def plotImages(images_arr, index):
+    for img in images_arr:
         plt.imsave(pathAu+str(index)+".png", img)
-        print(img)
         index=index+1
 
 def rotate_images(path):
@@ -29,12 +25,16 @@ def rotate_images(path):
     shuffle=True,
     target_size=(IMAGE_SIZE, IMAGE_SIZE)
     )
-    augmented_images = [data_generator[0][0][0] for i in range(5)]
-    plotImages(augmented_images)
+    return data_generator
 	
 
-rotate_images(path)
-
+data_generator= rotate_images(path)
+index = 0    
+num_rotate = 1
+for k in range(batch_size):
+    augmented_images = [data_generator[0][0][k] for i in range(num_rotate)]
+    plotImages(augmented_images, index)
+    index = index + num_rotate
 
 
 
